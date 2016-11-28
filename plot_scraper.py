@@ -13,12 +13,17 @@ if __name__ == "__main__":
         title = ""
         for line in f:
             if len(line) > 3:
+                # Title
                 if line[:2] == 'MV':
+                    # Skip episodes of series
+                    if '{' in line:
+                        continue
                     title = line[4:-1]
                     total += 1
                     temp = []
                     scraping_plots = True
                     r.sadd('movies', title)
+                # Plot
                 elif line[:2] == 'PL':
                     temp.append(line[4:-1])
                 else:
