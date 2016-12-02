@@ -18,6 +18,13 @@ if __name__ == "__main__":
                     # Skip episodes of series
                     if '{' in line:
                         continue
+                    # Skip video game titles
+                    if '(VG)' in line:
+                        continue
+                    # Skip video titles
+                    if '(V)' in line:
+                        continue
+
                     title = line[4:-1]
                     total += 1
                     temp = []
