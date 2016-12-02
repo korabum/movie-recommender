@@ -5,7 +5,7 @@ import string
 from nltk.stem import PorterStemmer
 
 stop_words = get_stop_words('en')
-stemmer = 
+ps = PorterStemmer()
 
 reload(sys)
 sys.setdefaultencoding('iso-8859-1')
@@ -21,12 +21,17 @@ def removePunctuation(text):
 	return text.translate(None, string.punctuation)
 
 def stem(text):
+	words = text.split()
+	stemmed_words = [ps.stem(word) for word in words]
+	return ' '.join(stemmed_words)
 
 
-titles = r.smembers('movies')
-for title in titles:
-    movie = r.hgetall('movie:' + title)
-    plot = movie['plot']
-    processed_plot = removePunctuation(plot)
-    processed_plot = removeStopWords(plot)
-    r.hset('process_movie:' + title, 'plot', processed_plot)
+if __name__ == "__main__":
+	titles = r.smembers('movies')
+	for title in titles:
+	    movie = r.hgetall('movie:' + title)
+	    plot = movie['plot']
+	    processed_plot = removePunctuation(plot)
+	    processed_plot = removeStopWords(processed_plot)
+	    processed_plot = stem(processed_plot)
+	    r.hset('process_movie:' + title, 'plot', processed_plot)
