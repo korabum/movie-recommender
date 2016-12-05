@@ -14,6 +14,8 @@ weight = {}
 vector_length = {}
 for title in titles:
     weight[title] = r.hgetall('weight:' + title)
+	for word in weight[title]:
+		weight[title][word] = float(weight[title][word])
 
 for title in weight:
     total = 0
