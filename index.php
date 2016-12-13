@@ -25,6 +25,8 @@ if (isset($_GET['title'])) {
 	if ($json["status"] == 0) {
 		$main_title = $json["title"];
 		$main_plot = $json["plot"];
+		$main_genre = $json["genre"];
+		$main_rating = $json["rating"];
 
 		$url = $base_url . 'get-similar-movies/' . $json["title"];
 		$url = str_replace(" ","%20",$url);
@@ -37,13 +39,13 @@ if (isset($_GET['title'])) {
 		if ($json["status"] == 0) {
 			$similar_movies = $json["movies"];
 		} else if ($json["status"] == 404) {
-			print_r("Not Found");
+			$message = "No similar movies";
 		}
 
 	} else if ($json["status"] == 1) {
 		$movies = $json["movies"];
 	} else if ($json["status"] == 404) {
-		print_r("Not Found");
+		$message = "Movie not found";
 	}
 
 }
@@ -63,8 +65,8 @@ if (isset($_GET['title'])) {
 <div class="container">
 
 	<div class="row">
-        <div class="col-md-6">
-    		<h2>Cibyl</h2>
+        <div class="col-md-12">
+    		<h1 class="title">Cibyl</h1>
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
 
@@ -83,30 +85,37 @@ if (isset($_GET['title'])) {
 			echo '<div class="list-group-item">';
 			echo '<h4 class="list-group-item-heading">'.$main_title.'</h4>';
 			echo '<p class="list-group-item-text">'.$main_plot.'</p>';
+			echo '<p class="list-group-item-text"><strong>'.$main_genre.'</strong></p>';
+			echo '<p class="list-group-item-text">Rating: '.$main_rating.'</p>';
 			echo '</div>';
 		echo '</div>';
-
-		echo '<h3>Similar Movies</h3>';
-		echo '<div class="list-group">';
-		foreach (array_reverse($similar_movies) as $movie) {
-			echo '<div class="list-group-item">';
-			echo '<h4 class="list-group-item-heading">'.$movie["title"].'</h4>';
-			echo '<p class="list-group-item-text">'.$movie["plot"].'</p>';
-			echo '<p class="list-group-item-text">Genre: '.$movie["genre"].'</p>';
-			echo '<p class="list-group-item-text">Rating: '.$movie["rating"].'</p>';
+		if (isset($similar_movies)) {
+			echo '<h3>Similar Movies</h3>';
+			echo '<div class="list-group">';
+			foreach (array_reverse($similar_movies) as $movie) {
+				echo '<div class="list-group-item">';
+				echo '<h4 class="list-group-item-heading">'.$movie["title"].'</h4>';
+				echo '<p class="list-group-item-text">'.$movie["plot"].'</p>';
+				echo '<p class="list-group-item-text"><strong>'.$movie["genre"].'</strong></p>';
+				echo '<p class="list-group-item-text">Rating: '.$movie["rating"].'</p>';
+				echo '</div>';
+			}
 			echo '</div>';
 		}
-		echo '</div>';
 	}
 
 	if (isset($movies)) {
-		echo '<div class="row"';
+		echo '<div class="col-md-12"';
 		echo '<div class="list-group">';
 		foreach ($movies as $movie) {
 			echo '<a href="./?title='.urlencode($movie["title"]).'" class="list-group-item">'.$movie["title"].'</button>';
 		}
 		echo "</div>";
 		echo "</div>";
+	}
+
+	if (isset($message)) {
+		echo '<div class="col-md-12 alert alert-danger"><p>'.$message.'</p></div>';
 	}
 ?>
 </div>
