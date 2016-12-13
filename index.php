@@ -48,52 +48,67 @@ if (isset($_GET['title'])) {
 
 }
 
-if (isset($_POST['similar_title'])) {
-	
-}
-
 ?>
+
+
 
 <html>
 <head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>	
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<div class="row">
-	<div class="col-md-12">
-		<div class="input-group">
-		<form action="" method="get">
-			<input type="text" class="form-control" placeholder="insert movie title" name="title"><br>
-			<button type="submit" class="btn btn-primary">Submit</button>
 
-		</form>
-		</div>
+<div class="container">
+
+	<div class="row">
+        <div class="col-md-6">
+    		<h2>Cibyl</h2>
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+
+                <form class="form-inline" action="" method="get">
+	                    <input type="text" class="form-control input-lg" placeholder="Insert movie title" name="title"/>
+                </form>
+
+                </div>
+            </div>
+        </div>
 	</div>
-</div>
 
 <?php
 	if (isset($main_title)) {
-		echo "Title: ".$main_title."<br>";
-		echo "Plot summary:<br>".$main_plot."<br>";
-		echo "Similar Movies:<br>";
+		echo '<div class="list-group">';
+			echo '<div class="list-group-item">';
+			echo '<h4 class="list-group-item-heading">'.$main_title.'</h4>';
+			echo '<p class="list-group-item-text">'.$main_plot.'</p>';
+			echo '</div>';
+		echo '</div>';
 
-		echo "<ul>";
-		foreach ($similar_movies as $movie) {
-			echo '<li>Title: '.$movie["title"].'<br>
-			Plot summary: '.$movie["plot"].'</li>';
+		echo '<h3>Similar Movies</h3>';
+		echo '<div class="list-group">';
+		foreach (array_reverse($similar_movies) as $movie) {
+			echo '<div class="list-group-item">';
+			echo '<h4 class="list-group-item-heading">'.$movie["title"].'</h4>';
+			echo '<p class="list-group-item-text">'.$movie["plot"].'</p>';
+			echo '<p class="list-group-item-text">Genre: '.$movie["genre"].'</p>';
+			echo '<p class="list-group-item-text">Rating: '.$movie["rating"].'</p>';
+			echo '</div>';
 		}
-		echo "</ul>";
+		echo '</div>';
 	}
 
 	if (isset($movies)) {
-		echo "<ul>";
+		echo '<div class="row"';
+		echo '<div class="list-group">';
 		foreach ($movies as $movie) {
-			echo '<li>
-			<a href="./?title='.urlencode($movie["title"]).'">'.$movie["title"].'</a>
-			</li>';
+			echo '<a href="./?title='.urlencode($movie["title"]).'" class="list-group-item">'.$movie["title"].'</button>';
 		}
-		echo "</ul>";
+		echo "</div>";
+		echo "</div>";
 	}
 ?>
+</div>
 </body>
 </html> 
