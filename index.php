@@ -119,5 +119,14 @@ if (isset($_GET['title'])) {
 	}
 ?>
 </div>
+<footer class="footer">
+<div class="container">
+        <p class="text-muted">Information courtesy of
+IMDb
+(http://www.imdb.com).
+Used with permission.</p>
+      </div>
+	
+</footer>
 </body>
 </html> 
