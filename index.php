@@ -1,8 +1,22 @@
 <?php
 
+function curl_get_contents($url)
+{
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+  $data = curl_exec($ch);
+  curl_close($ch);
+  return $data;
+}
+
 if (isset($_GET['title'])) {
-	$url = './get_plot_summary/' . $_GET["title"];
-	$content = file_get_contents($url);
+	$base_url = 'http://localhost:5000/';
+	$url = $base_url . 'get-plot-summary/' . $_GET["title"];
+	$url = str_replace(" ","%20",$url);
+	$content = curl_get_contents($url);
 	$json = json_decode($content, true);
 
 	// $content = file_get_contents('./status0');
@@ -12,8 +26,9 @@ if (isset($_GET['title'])) {
 		$main_title = $json["title"];
 		$main_plot = $json["plot"];
 
-		$url = './get_similar_movies/' . $_POST["title"];
-		$content = file_get_contents($url);
+		$url = $base_url . 'get-similar-movies/' . $json["title"];
+		$url = str_replace(" ","%20",$url);
+		$content = curl_get_contents($url);
 		$json = json_decode($content, true);
 
 		// $content = file_get_contents('./output');
@@ -74,7 +89,7 @@ if (isset($_POST['similar_title'])) {
 		echo "<ul>";
 		foreach ($movies as $movie) {
 			echo '<li>
-			<a href="./?title='.$movie["title"].'">'.$movie["title"].'</a>
+			<a href="./?title='.urlencode($movie["title"]).'">'.$movie["title"].'</a>
 			</li>';
 		}
 		echo "</ul>";
